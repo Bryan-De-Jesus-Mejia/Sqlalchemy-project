@@ -1,11 +1,17 @@
 import customtkinter as ctk
+from codes.insert import insert_cliente
 
 class ClientForm(ctk.CTkToplevel):
+    def Insertar(self):
+        nombre  = self.inp_nombre.get()
+        telefono = self.inp_telefono.get()
+        email   = self.inp_email.get()
+        estado  = self.cbo_estado.get()
+        insert_cliente(nombre, telefono, email, estado)
+        print("Cliente insertado")
     """
     Ventana de formulario para Insertar/Editar clientes.
-    No tiene funcionalidad de guardado; solo UI.
-    mode: "insert" | "edit"
-    initial_values: tupla o dict con valores iniciales (opcional)
+    El campo ID se muestra pero no es editable.
     """
     def __init__(self, master, mode="insert", initial_values=None):
         super().__init__(master)
@@ -13,9 +19,9 @@ class ClientForm(ctk.CTkToplevel):
         self.geometry("520x460")
         self.minsize(480, 420)
 
-        # Hacerla tipo modal (simple)
+        # Modal simple
         self.grab_set()
-        self.focus()
+        self.focus_force()
 
         # Layout
         self.grid_columnconfigure(0, weight=1)
@@ -33,8 +39,14 @@ class ClientForm(ctk.CTkToplevel):
         for i in range(2):
             form.grid_columnconfigure(i, weight=1)
 
-        # Campos
-        self.inp_id = _labeled_entry(form, "ID", 0, placeholder_text="(auto)")
+        # --- Campo ID (deshabilitado siempre) ---
+        ctk.CTkLabel(form, text="ID").grid(row=0, column=0, sticky="w", padx=12, pady=(12, 4))
+        self.inp_id = ctk.CTkEntry(form, placeholder_text="")
+        self.inp_id.grid(row=0, column=1, sticky="ew", padx=12, pady=(12, 4))
+        self.inp_id.insert(0, "auto")
+        self.inp_id.configure(state="disabled")
+
+        # --- Campos editables ---
         self.inp_nombre = _labeled_entry(form, "Nombre", 1, placeholder_text="Nombre completo")
         self.inp_telefono = _labeled_entry(form, "Teléfono", 2, placeholder_text="809-000-0000")
         self.inp_email = _labeled_entry(form, "Email", 3, placeholder_text="correo@dominio.com")
@@ -47,12 +59,17 @@ class ClientForm(ctk.CTkToplevel):
         self.txt_notas = ctk.CTkTextbox(form, height=120)
         self.txt_notas.grid(row=5, column=1, sticky="nsew", padx=12, pady=(12, 12))
 
-        # Inicializar valores si llegan (solo visual)
+        # --- Valores iniciales (modo Editar) ---
         if initial_values:
-            # Si vienen como tupla (desde Treeview)
             try:
                 _id, nombre, tel, email, estado = initial_values
+
+                # ID → se carga pero siempre bloqueado
+                self.inp_id.configure(state="normal")
+                self.inp_id.delete(0, "end")
                 self.inp_id.insert(0, str(_id))
+                self.inp_id.configure(state="disabled")
+
                 self.inp_nombre.insert(0, nombre)
                 self.inp_telefono.insert(0, tel)
                 self.inp_email.insert(0, email)
@@ -61,13 +78,13 @@ class ClientForm(ctk.CTkToplevel):
             except Exception:
                 pass
 
-        # Barra inferior
+        # --- Barra inferior ---
         actions = ctk.CTkFrame(self, fg_color="transparent")
         actions.grid(row=2, column=0, sticky="ew", padx=16, pady=(0, 16))
         actions.grid_columnconfigure((0, 1, 2), weight=1)
 
         ctk.CTkButton(actions, text="Guardar", height=36,
-                        command=lambda: None).grid(row=0, column=0, padx=6, sticky="ew")
+                        command=lambda: self.Insertar()).grid(row=0, column=0, padx=6, sticky="ew")
         ctk.CTkButton(actions, text="Limpiar", height=36,
                         command=lambda: self._clear()).grid(row=0, column=1, padx=6, sticky="ew")
         ctk.CTkButton(actions, text="Cancelar", height=36,
@@ -75,13 +92,22 @@ class ClientForm(ctk.CTkToplevel):
                         command=self.destroy).grid(row=0, column=2, padx=6, sticky="ew")
 
     def _clear(self):
-        for w in (self.inp_id, self.inp_nombre, self.inp_telefono, self.inp_email):
+        # ID → siempre vuelve a "auto" y bloqueado
+        self.inp_id.configure(state="normal")
+        self.inp_id.delete(0, "end")
+        self.inp_id.insert(0, "auto")
+        self.inp_id.configure(state="disabled")
+
+        # Limpiar otros campos
+        for w in (self.inp_nombre, self.inp_telefono, self.inp_email):
             w.delete(0, "end")
         self.cbo_estado.set("Activo")
         self.txt_notas.delete("1.0", "end")
+
 
 def _labeled_entry(parent, label, row, placeholder_text=""):
     ctk.CTkLabel(parent, text=label).grid(row=row, column=0, sticky="w", padx=12, pady=(12, 4))
     entry = ctk.CTkEntry(parent, placeholder_text=placeholder_text)
     entry.grid(row=row, column=1, sticky="ew", padx=12, pady=(12, 4))
     return entry
+

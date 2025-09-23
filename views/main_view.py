@@ -20,7 +20,7 @@ class MainView(ctk.CTkFrame):
         table_frame.grid_columnconfigure(0, weight=1)
         table_frame.grid_rowconfigure(0, weight=1)
 
-        # Tabla (equivalente DGV)
+        # Tabla
         columns = ("id", "nombre", "telefono", "email", "estado")
         self.tree = ttk.Treeview(table_frame, columns=columns, show="headings", selectmode="browse")
         self.tree.heading("id", text="ID")
@@ -42,7 +42,7 @@ class MainView(ctk.CTkFrame):
         self.tree.grid(row=0, column=0, sticky="nsew")
         scroll_y.grid(row=0, column=1, sticky="ns")
 
-        # Filas demo SOLO para ver la UI
+        # Filas demo
         demo_rows = [
             (1, "Ana Pérez", "809-555-1001", "ana@correo.com", "Activo"),
             (2, "Luis Gómez", "809-555-1002", "luis@correo.com", "Inactivo"),
@@ -51,13 +51,13 @@ class MainView(ctk.CTkFrame):
         for r in demo_rows:
             self.tree.insert("", "end", values=r)
 
-        # Barra inferior: acciones
+        # Barra inferior
         actions = ctk.CTkFrame(self, fg_color="transparent")
         actions.grid(row=2, column=0, sticky="ew", padx=16, pady=(0, 12))
         for i in range(5):
             actions.grid_columnconfigure(i, weight=1)
 
-        # Botones (sin lógica de datos)
+        # Botones
         ctk.CTkButton(actions, text="Insertar", height=36,
                         command=self.open_insert_form).grid(row=0, column=0, padx=6, pady=4, sticky="ew")
 
@@ -74,12 +74,10 @@ class MainView(ctk.CTkFrame):
         ctk.CTkButton(actions, text="Cerrar", height=36,
                         command=self.master.destroy).grid(row=0, column=4, padx=6, pady=4, sticky="ew")
 
-    # --- Navegación a formularios (solo UI) ---
     def open_insert_form(self):
         ClientForm(self, mode="insert")
 
     def open_edit_form(self):
-        # Se podría pasar valores seleccionados; por ahora se abre vacío (UI only)
         selected = self.tree.focus()
         initial_values = self.tree.item(selected, "values") if selected else None
         ClientForm(self, mode="edit", initial_values=initial_values)
