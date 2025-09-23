@@ -1,13 +1,13 @@
 import customtkinter as ctk
 from tkinter import ttk
 
-def setup_style(appearance: str = "dark", theme: str = "blue"):
+def setup_style(root, appearance: str = "dark", theme: str = "blue"):
     # Apariencia global
-    ctk.set_appearance_mode(appearance)      # "light" | "dark" | "system"
-    ctk.set_default_color_theme(theme)       # "blue" | "green" | "dark-blue"
+    ctk.set_appearance_mode(appearance)
+    ctk.set_default_color_theme(theme)
 
-    # Estilo moderno para Treeview (tabla)
-    style = ttk.Style()
+    # ¡IMPORTANTE! Vincular el Style al root existente
+    style = ttk.Style(master=root)
     style.theme_use("default")
     style.configure(
         "Treeview",

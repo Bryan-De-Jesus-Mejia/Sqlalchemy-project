@@ -2,17 +2,16 @@ import customtkinter as ctk
 from styles import setup_style
 from views.main_view import MainView
 
-def main():
-    setup_style()
+def run():
+    root = ctk.CTk()  # ÚNICO root
+    root.title("Administrador de Clientes")
+    root.geometry("960x560")
+    root.minsize(860, 480)
 
-    app = ctk.CTk()
-    app.title("Administrador de Clientes")
-    app.geometry("960x560")
-    app.minsize(860, 480)
+    setup_style(root)  # <-- ahora después de crear el root
 
-    MainView(app).pack(fill="both", expand=True)
-
-    app.mainloop()
+    MainView(root).pack(fill="both", expand=True)
+    root.mainloop()
 
 if __name__ == "__main__":
-    main()
+    run()
