@@ -1,5 +1,6 @@
 import customtkinter as ctk
 from codes.insert import insert_cliente
+from codes.edit import update_cliente
 
 class ClientForm(ctk.CTkToplevel):
     def Insertar(self):
@@ -9,6 +10,15 @@ class ClientForm(ctk.CTkToplevel):
         estado  = self.cbo_estado.get()
         insert_cliente(nombre, telefono, email, estado)
         print("Cliente insertado")
+
+    def Editar(self):
+        id = self.inp_id.get()
+        nombre  = self.inp_nombre.get()
+        telefono = self.inp_telefono.get()
+        email   = self.inp_email.get()
+        estado  = self.cbo_estado.get()
+        update_cliente(id, nombre, telefono, email, estado)
+        print("Cliente Editado")
     """
     Ventana de formulario para Insertar/Editar clientes.
     El campo ID se muestra pero no es editable.
@@ -84,7 +94,7 @@ class ClientForm(ctk.CTkToplevel):
         actions.grid_columnconfigure((0, 1, 2), weight=1)
 
         ctk.CTkButton(actions, text="Guardar", height=36,
-                        command=lambda: self.Insertar()).grid(row=0, column=0, padx=6, sticky="ew")
+                        command=lambda:self.Insertar() if mode == "insert" else  self.Editar()).grid(row=0, column=0, padx=6, sticky="ew")
         ctk.CTkButton(actions, text="Limpiar", height=36,
                         command=lambda: self._clear()).grid(row=0, column=1, padx=6, sticky="ew")
         ctk.CTkButton(actions, text="Cancelar", height=36,
