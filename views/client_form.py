@@ -90,6 +90,7 @@ class ClientForm(ctk.CTkToplevel):
             except Exception:
                 pass
 
+        
         # --- Barra inferior ---
         actions = ctk.CTkFrame(self, fg_color="transparent")
         actions.grid(row=2, column=0, sticky="ew", padx=16, pady=(0, 16))
@@ -97,8 +98,10 @@ class ClientForm(ctk.CTkToplevel):
 
         ctk.CTkButton(actions, text="Guardar", height=36,
                         command=lambda:self.Insertar() if mode == "insert" else  self.Editar()).grid(row=0, column=0, padx=6, sticky="ew")
-        ctk.CTkButton(actions, text="Limpiar", height=36,
-                        command=lambda: self._clear()).grid(row=0, column=1, padx=6, sticky="ew")
+        
+        if mode == "insert":
+            ctk.CTkButton(actions, text="Limpiar", height=36,
+                            command=lambda: self._clear()).grid(row=0, column=1, padx=6, sticky="ew")
         ctk.CTkButton(actions, text="Cancelar", height=36,
                         fg_color="#444", hover_color="#333",
                         command=self.destroy).grid(row=0, column=2, padx=6, sticky="ew")
