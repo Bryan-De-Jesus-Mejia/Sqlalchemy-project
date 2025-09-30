@@ -10,6 +10,7 @@ class ClientForm(ctk.CTkToplevel):
         estado  = self.cbo_estado.get()
         insert_cliente(nombre, telefono, email, estado)
         print("Cliente insertado")
+        self.load_clients()
 
     def Editar(self):
         id = self.inp_id.get()
@@ -19,6 +20,7 @@ class ClientForm(ctk.CTkToplevel):
         estado  = self.cbo_estado.get()
         update_cliente(id, nombre, telefono, email, estado)
         print("Cliente Editado")
+        self.load_clients()
     """
     Ventana de formulario para Insertar/Editar clientes.
     El campo ID se muestra pero no es editable.

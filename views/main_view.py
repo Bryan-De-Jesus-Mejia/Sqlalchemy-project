@@ -3,7 +3,7 @@ from tkinter import ttk
 from sqlalchemy import create_engine, MetaData, Table, select
 from .client_form import ClientForm
 from codes.select import select_cliente
-
+from codes.delete import delete_cliente
 
 def show_warning(parent, message="Seleccione un cliente para editar"):
     popup = ctk.CTkToplevel(parent)
@@ -93,7 +93,7 @@ class MainView(ctk.CTkFrame):
 
         ctk.CTkButton(actions, text="Eliminar", height=36,
                         fg_color="#c23b3b", hover_color="#a82f2f",
-                        command=lambda: None).grid(row=0, column=2, padx=6, pady=4, sticky="ew")
+                        command= self.delete).grid(row=0, column=2, padx=6, pady=4, sticky="ew")
 
         ctk.CTkButton(actions, text="Refrescar", height=36,
                         command=self.load_clients).grid(row=0, column=3, padx=6, pady=4, sticky="ew")
@@ -126,3 +126,14 @@ class MainView(ctk.CTkFrame):
         nombre = self.search_entry.get()
         result1 = select_cliente(nombre)
         return result1
+
+    def delete(self):
+        selected = self.tree.focus()
+        if not selected:
+            show_warning(self, "Seleccione un cliente para eliminar")
+            return
+        values = self.tree.item(selected, "values")
+        id = values[0]
+        nombre = values[1]
+        delete_cliente(id,nombre)
+        self.load_clients()
