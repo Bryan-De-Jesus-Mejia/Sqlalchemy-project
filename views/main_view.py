@@ -46,7 +46,7 @@ class MainView(ctk.CTkFrame):
         title = ctk.CTkLabel(self, text="Clientes", font=ctk.CTkFont(size=22, weight="bold"))
         title.grid(row=0, column=0, sticky="w", padx=16, pady=(16, 8))
 
-        # 🆕 Campo de búsqueda
+        # Campo de búsqueda
         self.search_entry = ctk.CTkEntry(self, placeholder_text="Buscar por nombre", width=220)
         self.search_entry.grid(row=0, column=1, sticky="e", padx=16, pady=(16, 8))
 

@@ -6,7 +6,6 @@ def setup_style(root, appearance: str = "dark", theme: str = "blue"):
     ctk.set_appearance_mode(appearance)
     ctk.set_default_color_theme(theme)
 
-    # ¡IMPORTANTE! Vincular el Style al root existente
     style = ttk.Style(master=root)
     style.theme_use("default")
     style.configure(

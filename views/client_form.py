@@ -51,7 +51,7 @@ class ClientForm(ctk.CTkToplevel):
         for i in range(2):
             form.grid_columnconfigure(i, weight=1)
 
-        # --- Campo ID (deshabilitado siempre) ---
+        # --- Campo ID ---
         ctk.CTkLabel(form, text="ID").grid(row=0, column=0, sticky="w", padx=12, pady=(12, 4))
         self.inp_id = ctk.CTkEntry(form, placeholder_text="")
         self.inp_id.grid(row=0, column=1, sticky="ew", padx=12, pady=(12, 4))
@@ -76,7 +76,6 @@ class ClientForm(ctk.CTkToplevel):
             try:
                 _id, nombre, tel, email, estado = initial_values
 
-                # ID → se carga pero siempre bloqueado
                 self.inp_id.configure(state="normal")
                 self.inp_id.delete(0, "end")
                 self.inp_id.insert(0, str(_id))
@@ -107,7 +106,7 @@ class ClientForm(ctk.CTkToplevel):
                         command=self.destroy).grid(row=0, column=2, padx=6, sticky="ew")
 
     def _clear(self):
-        # ID → siempre vuelve a "auto" y bloqueado
+        # Resetear ID a "auto"
         self.inp_id.configure(state="normal")
         self.inp_id.delete(0, "end")
         self.inp_id.insert(0, "auto")
